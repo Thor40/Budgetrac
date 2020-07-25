@@ -9,16 +9,17 @@ request.onupgradeneeded = function(event) {
     const db = event.target.result;
     // create an object store (table) called 'new_budget',  set it to have an auto incrementing primary key of sorts
     db.createObjectStore('new_budget', { autoIncrement: true });
-    // upon success
-    request.onsuccess = function(event) {
-        // when db is successful with object store (from onupgradedneeded event above) or simply established a connection, save reference to db in global variable
-        db = event.target.result;
+};
 
-        // check if app is online, if yes, run uploadBudget() function to send all local db data to api
-        if (navigator.onLine) {
-            // gather info and add to db on reconnection to internet
-            uploadBudget();
-        }
+// upon success
+request.onsuccess = function(event) {
+    // when db is successful with object store (from onupgradedneeded event above) or simply established a connection, save reference to db in global variable
+    db = event.target.result;
+
+    // check if app is online, if yes, run uploadBudget() function to send all local db data to api
+    if (navigator.onLine) {
+        // gather info and add to db on reconnection to internet
+        uploadBudget();
     }
 };
 
@@ -37,7 +38,7 @@ function saveRecord(record) {
 
     // add record to your store with add method
     budgetObjectStore.add(record);
-}
+};
 
 function uploadBudget() {
     // open a transaction on your db
@@ -53,7 +54,7 @@ function uploadBudget() {
 getAll.onsuccess = function() {
     // if there was data in indexedDb's store, let's send it to the api server
     if (getAll.result.length > 0) {
-      fetch('/api/transaction', {
+      fetch('/api/transaction/', {
         method: 'POST',
         body: JSON.stringify(getAll.result),
         headers: {
@@ -68,7 +69,7 @@ getAll.onsuccess = function() {
           }
           // open one more transaction
           const transaction = db.transaction(['new_budget'], 'readwrite');
-          // access the new_pizza object store
+          // access the new_budget object store
           const budgetObjectStore = transaction.objectStore('new_budget');
           // clear all items in your store
           budgetObjectStore.clear();
