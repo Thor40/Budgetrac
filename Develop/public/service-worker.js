@@ -16,7 +16,7 @@ const FILES_TO_CACHE = [
     '/icons/icon-512x512.png',
     '/js/index.js'
 
-]
+];
 
 self.addEventListener('install', function (e) {
     e.waitUntil(
